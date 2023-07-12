@@ -27,6 +27,7 @@ export default {
     {
       name: 'ranking',
       title: 'Ranking',
+      description: 'DO NOT FORGET TO PUBLISH AFTER CHANGING THIS VALUE!',
       type: 'number',
       validation: (Rule: Rule) => [
         Rule.custom((ranking: number, context) => {
