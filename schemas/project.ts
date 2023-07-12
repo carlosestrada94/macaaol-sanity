@@ -37,12 +37,12 @@ export default {
           const client = getClient({apiVersion: getCurrentISODate()})
 
           return client.fetch('*[_type == "project"] {title, ranking}').then((results: any) => {
-            const isCurrentRankingTaken = results.some(
-              (result: any) => result.ranking === ranking && result.title !== document.title
+            const projectWithRankingTaken = results.find(
+              (project: any) => project.ranking === ranking && project.title !== document.title
             )
 
-            if (isCurrentRankingTaken) {
-              return 'Ranking is already taken'
+            if (projectWithRankingTaken) {
+              return `Already taken by ${projectWithRankingTaken.title}`
             }
 
             return true
