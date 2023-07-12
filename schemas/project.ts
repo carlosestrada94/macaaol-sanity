@@ -1,3 +1,6 @@
+import {Rule} from 'sanity'
+import getCurrentISODate from '../utilities/getCurrentISODate'
+
 export default {
   name: 'project',
   title: 'Project',
@@ -21,6 +24,32 @@ export default {
     },
   ],
   fields: [
+    {
+      name: 'ranking',
+      title: 'Ranking',
+      type: 'number',
+      validation: (Rule: Rule) => [
+        Rule.custom((ranking: number, context) => {
+          const {document, getClient} = context
+
+          if (!document) return true
+
+          const client = getClient({apiVersion: getCurrentISODate()})
+
+          return client.fetch('*[_type == "project"] {title, ranking}').then((results: any) => {
+            const isCurrentRankingTaken = results.some(
+              (result: any) => result.ranking === ranking && result.title !== document.title
+            )
+
+            if (isCurrentRankingTaken) {
+              return 'Ranking is already taken'
+            }
+
+            return true
+          })
+        }),
+      ],
+    },
     {
       name: 'title',
       title: 'Project Title',
